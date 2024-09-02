@@ -47,7 +47,7 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "Backspace" && currentIndex >= 0){
         if (inputs[currentIndex].value !== "") {
             inputs[currentIndex].value = "";
-            } else if (currentIndex > 0) {
+            } else if (currentIndex > minIndex) {
                 currentIndex--;
                 inputs[currentIndex].value = "";
           }
