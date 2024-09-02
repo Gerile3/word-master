@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-body {
-    background-color: whitesmoke;
-}
-
 .hidden {
     display: none;
 }
@@ -39,5 +35,4 @@ body {
     text-align: center;
     width: 3rem;
     border-radius: 10px;
-    background-color: whitesmoke;
 }
