@@ -3,6 +3,7 @@ const playPrevious = document.querySelector(".previous")
 const inputs = document.querySelectorAll('.word-row input');
 const intro = document.querySelector('.intro')
 const text = document.querySelector(".intro p")
+const loadingIcon = document.querySelector(".intro img")
 
 let minIndex = 0
 let maxIndex = 5
@@ -27,6 +28,7 @@ async function getWord(randomState){
             const data = await response.json();
             const correctWord = data.word;
             console.log(correctWord)
+            loadingIcon.classList.add("hidden")
             return correctWord.toUpperCase();
         } catch (error){
             console.log(error);
@@ -37,6 +39,7 @@ async function getWord(randomState){
             const response = await fetch("https://words.dev-apis.com/word-of-the-day");
             const data = await response.json();
             const correctWord = data.word;
+            loadingIcon.classList.add("hidden")
             return correctWord.toUpperCase();
         } catch (error){
             console.log(error);
@@ -54,6 +57,7 @@ async function validateWord(wordArray){
         });
         const data = await response.json();
         const validness = data.validWord;
+        loadingIcon.classList.add("hidden")
         return validness;
     } catch (error) {
         console.log(error);
@@ -127,11 +131,11 @@ async function processWord(){
         for (minIndex = currentIndex-4; minIndex < maxIndex; minIndex++) {
             wordArray += inputs[minIndex].value
         }
-
+        text.textContent = ""
+        loadingIcon.classList.remove("hidden")
         const valid = await validateWord(wordArray);
 
         if (valid){
-            text.textContent = "Type 5-length word!"
             for (minIndex = currentIndex-4; minIndex < maxIndex; minIndex++) {
                 word = inputs[minIndex].value
 
