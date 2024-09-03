@@ -1,8 +1,10 @@
 # word-master
-A word finding that has written with html-css-js
+A wordle clone made with Js
 
 
 work in progress:
-- add better logic for color check
-- add screen for win or lose
-- implement daily word api
+- ~~add better logic for color check~~
+- ~~add screen for win or lose~~
+- ~~implement daily word api~~
+- add waiting animation
+- implement random day function
