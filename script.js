@@ -15,20 +15,19 @@ let postText = document.createElement("p")
 let remaningLife = 5
 let gameState = "Normal"
 
-async function loadcomplete(){
-    correctWord = await getWord(false)
+async function loadcomplete(randomState){
+    correctWord= await getWord(randomState)
     reversedCorrectWord = correctWord.split("").reverse().join("")
 }
 
-async function getWord(randomDay){
-    if (randomDay){
+async function getWord(randomState){
+    if (randomState){
         try {
             const response = await fetch("https://words.dev-apis.com/word-of-the-day?random=1");
             const data = await response.json();
             const correctWord = data.word;
-            const puzzleNumber = data.puzzleNumber
-            console.log(correctWord, puzzleNumber);
-            return correctWord.toUpperCase(), puzzleNumber;
+            console.log(correctWord)
+            return correctWord.toUpperCase();
         } catch (error){
             console.log(error);
             return false;
@@ -38,7 +37,6 @@ async function getWord(randomDay){
             const response = await fetch("https://words.dev-apis.com/word-of-the-day");
             const data = await response.json();
             const correctWord = data.word;
-            console.log(correctWord);
             return correctWord.toUpperCase();
         } catch (error){
             console.log(error);
@@ -49,7 +47,6 @@ async function getWord(randomDay){
 
 
 async function validateWord(wordArray){
-    console.log(wordArray)
     try {
         const response = await fetch("https://words.dev-apis.com/validate-word", {
           method: "POST",
@@ -57,16 +54,15 @@ async function validateWord(wordArray){
         });
         const data = await response.json();
         const validness = data.validWord;
-        console.log(validness);
         return validness;
-      } catch (error) {
+    } catch (error) {
         console.log(error);
         return false;
-      }
+    }
 }
 
 
-const resetGame = () => {
+const resetGame = (randomState = false) => {
     minIndex = 0
     maxIndex = 5
     currentIndex = 0
@@ -76,7 +72,13 @@ const resetGame = () => {
     gameState = "Normal"
     resetButton.classList.add("hidden")
     playPrevious.classList.add("hidden")
-    postText.textContent = `Lets try once more!`
+
+    if (randomState) {
+        postText.textContent = `Random times, random words. Good luck!`
+    } else {
+        postText.textContent = `Lets try once more!`
+    }
+
     intro.appendChild(postText)
     for (let index = 0; index < inputs.length; index++) {
         inputs[index].value = "";
@@ -108,7 +110,6 @@ const isLetter = (letter) => {
 }
 
 const continueGame = (word) => {
-    console.log("here")
     if (word === correctWord) {
         winScreen()
     } else {
@@ -164,6 +165,11 @@ resetButton.addEventListener("click", () => {
     resetGame()
 })
 
+playPrevious.addEventListener("click", () => {
+    loadcomplete(true)
+    resetGame(true)
+})
+
 document.addEventListener("keyup", (event) => {
     if (gameState === "Win" || gameState === "Lose"){
         console.log("game over")
@@ -179,7 +185,6 @@ document.addEventListener("keyup", (event) => {
     }
     
     if (event.key === "Backspace" && currentIndex >= 0){
-        console.log(currentIndex, minIndex)
         if (inputs[currentIndex].value !== "") {
             inputs[currentIndex].value = "";
             } else if (currentIndex > minIndex) {
@@ -194,6 +199,6 @@ document.addEventListener("keyup", (event) => {
 });
 
 window.addEventListener("load", () => {
-    loadcomplete()
+    loadcomplete(false)
 });
 
