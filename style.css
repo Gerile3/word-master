@@ -2,6 +2,12 @@
     box-sizing: border-box;
 }
 
+@keyframes spin {
+    to {
+      transform: rotateZ(360deg);
+    }
+}
+
 .hidden {
     display: none;
 }
@@ -21,9 +27,14 @@
     font-size: 1.2rem;
 }
 
+.intro img{
+    width: 1.5rem;
+    height: auto;
+    animation: spin 1.5s linear infinite;
+}
+
 .word-container{
     text-align: center;
-    border: 1px solid black;
     padding: 10px;
 }
 
