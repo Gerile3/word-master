@@ -17,6 +17,10 @@
     border-bottom: 2px solid black;
 }
 
+.intro p{
+    font-size: 1.2rem;
+}
+
 .word-container{
     text-align: center;
     border: 1px solid black;
@@ -26,13 +30,36 @@
 .word-row{
     margin: 10px;
     padding: 5px;
+    color: white;
 }
 
 .word-row input {
+    color: black;
     border: 1px solid black;
     margin: 0 5px;
     font-size: 2rem;
     text-align: center;
     width: 3rem;
     border-radius: 10px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.reset, 
+.previous{
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 2rem;
+    width: 100px;
+}
+
+.reset:hover,
+.previous:hover{
+    cursor: pointer;
 }
