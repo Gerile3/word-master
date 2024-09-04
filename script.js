@@ -4,6 +4,7 @@ const inputs = document.querySelectorAll('.word-row input');
 const intro = document.querySelector('.intro')
 const text = document.querySelector(".intro p")
 const loadingIcon = document.querySelector(".intro img")
+const postText = document.createElement("p")
 
 let minIndex = 0
 let maxIndex = 5
@@ -12,7 +13,6 @@ let wordArray = ""
 let checkedChars = ""
 let correctWord = "DEBUG" // in case api fails to give word
 let reversedCorrectWord = correctWord.split("").reverse().join("")
-let postText = document.createElement("p")
 let remaningLife = 5
 let gameState = "Normal"
 
@@ -27,7 +27,6 @@ async function getWord(randomState){
             const response = await fetch("https://words.dev-apis.com/word-of-the-day?random=1");
             const data = await response.json();
             const correctWord = data.word;
-            console.log(correctWord)
             loadingIcon.classList.add("hidden")
             return correctWord.toUpperCase();
         } catch (error){
@@ -174,7 +173,7 @@ playPrevious.addEventListener("click", () => {
 document.addEventListener("keyup", (event) => {
     if (gameState === "Win" || gameState === "Lose"){
         console.log("game over")
-        event.preventDefault
+        event.preventDefault()
         return
     }
 
