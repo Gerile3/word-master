@@ -10,7 +10,7 @@ let maxIndex = 5
 let currentIndex = 0
 let wordArray = ""
 let checkedChars = ""
-let correctWord = "MEMET"
+let correctWord = "DEBUG" // in case api fails to give word
 let reversedCorrectWord = correctWord.split("").reverse().join("")
 let postText = document.createElement("p")
 let remaningLife = 5
@@ -48,7 +48,6 @@ async function getWord(randomState){
     }
 }
 
-
 async function validateWord(wordArray){
     try {
         const response = await fetch("https://words.dev-apis.com/validate-word", {
@@ -64,7 +63,6 @@ async function validateWord(wordArray){
         return false;
     }
 }
-
 
 const resetGame = (randomState = false) => {
     minIndex = 0
@@ -163,7 +161,6 @@ async function processWord(){
         }
 }
 }
-
 
 resetButton.addEventListener("click", () => {
     resetGame()
