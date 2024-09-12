@@ -159,6 +159,12 @@ const winScreen = () => {
     text.classList.add("hidden")
     resetButton.classList.remove("hidden")
     playPrevious.classList.remove("hidden")
+
+    confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
 }
 
 const loseScreen = () => {
