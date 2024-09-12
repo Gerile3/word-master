@@ -181,6 +181,7 @@ document.addEventListener("keyup", (event) => {
         inputs[currentIndex].value = event.key.toUpperCase();
         if ((currentIndex + 1) % 5 !== 0 && currentIndex < 25){
             currentIndex++;
+            inputs[currentIndex].focus(); // Move focus to the next input
         }
     }
     
@@ -189,6 +190,7 @@ document.addEventListener("keyup", (event) => {
             inputs[currentIndex].value = "";
             } else if (currentIndex > minIndex) {
                 currentIndex--;
+                inputs[currentIndex].focus();
                 inputs[currentIndex].value = "";
           }
     }
@@ -200,5 +202,9 @@ document.addEventListener("keyup", (event) => {
 
 window.addEventListener("load", () => {
     loadcomplete(false)
+});
+
+inputs.forEach(input => {
+    input.readOnly = true; // Keeps the input focusable but prevents editing
 });
 
