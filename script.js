@@ -15,7 +15,7 @@ let correctWord = "DEBUG" // in case api fails to give word
 let reversedCorrectWord = correctWord.split("").reverse().join("")
 let remaningLife = 5
 let gameState = "Normal"
-let isProcessingInput = false  // New flag to prevent double input
+let isProcessingInput = false  // Flag to prevent double input
 
 function updateInputState() {
     inputs.forEach((input, index) => {
@@ -59,15 +59,22 @@ inputs.forEach((input, index) => {
     });
 
     input.addEventListener('input', (event) => {
+        event.preventDefault();
         if (isProcessingInput) return;
         
-        if (event.inputType === "insertText") {
-            handleInput(index, event.data);
+        const value = event.target.value;
+        if (value.length > 0) {
+            handleInput(index, value[value.length - 1].toUpperCase());
         } else if (event.inputType === "deleteContentBackward") {
             if (index > minIndex) {
                 currentIndex = index - 1;
                 inputs[currentIndex].focus();
             }
+        }
+        
+        // Ensure only one character is in the input
+        if (input.value.length > 1) {
+            input.value = input.value[input.value.length - 1].toUpperCase();
         }
     });
 });
