@@ -15,10 +15,67 @@ let correctWord = "DEBUG" // in case api fails to give word
 let reversedCorrectWord = correctWord.split("").reverse().join("")
 let remaningLife = 5
 let gameState = "Normal"
+let isProcessingInput = false  // New flag to prevent double input
+
+function updateInputState() {
+    inputs.forEach((input, index) => {
+        if (index >= minIndex && index < maxIndex) {
+            input.removeAttribute('readonly');
+        } else {
+            input.setAttribute('readonly', 'readonly');
+        }
+    });
+}
+
+function handleInput(index, value) {
+    if (gameState === "Win" || gameState === "Lose" || isProcessingInput) {
+        return;
+    }
+
+    isProcessingInput = true;
+
+    if (index >= minIndex && index < maxIndex) {
+        if (isLetter(value)) {
+            inputs[index].value = value.toUpperCase();
+            if (index + 1 < maxIndex) {
+                currentIndex = index + 1;
+                inputs[currentIndex].focus();
+            }
+        } else {
+            inputs[index].value = '';
+        }
+    }
+
+    isProcessingInput = false;
+}
+
+inputs.forEach((input, index) => {
+    input.addEventListener('focus', () => {
+        if (index >= minIndex && index < maxIndex) {
+            currentIndex = index;
+        } else {
+            inputs[currentIndex].focus();
+        }
+    });
+
+    input.addEventListener('input', (event) => {
+        if (isProcessingInput) return;
+        
+        if (event.inputType === "insertText") {
+            handleInput(index, event.data);
+        } else if (event.inputType === "deleteContentBackward") {
+            if (index > minIndex) {
+                currentIndex = index - 1;
+                inputs[currentIndex].focus();
+            }
+        }
+    });
+});
 
 async function loadcomplete(randomState){
-    correctWord= await getWord(randomState)
+    correctWord = await getWord(randomState)
     reversedCorrectWord = correctWord.split("").reverse().join("")
+    updateInputState()
 }
 
 async function getWord(randomState){
@@ -85,6 +142,7 @@ const resetGame = (randomState = false) => {
         inputs[index].value = "";
         inputs[index].style.backgroundColor = "white";
     }
+    updateInputState();
 }
 
 const winScreen = () => {
@@ -94,7 +152,6 @@ const winScreen = () => {
     text.classList.add("hidden")
     resetButton.classList.remove("hidden")
     playPrevious.classList.remove("hidden")
-
 }
 
 const loseScreen = () => {
@@ -121,6 +178,7 @@ const continueGame = (word) => {
         wordArray = ""
         checkedChars = ""
     }
+    updateInputState();
 }
 
 async function processWord(){
@@ -158,7 +216,7 @@ async function processWord(){
             currentIndex -= 4
             wordArray = ""
         }
-}
+    }
 }
 
 resetButton.addEventListener("click", () => {
@@ -170,41 +228,31 @@ playPrevious.addEventListener("click", () => {
     resetGame(true)
 })
 
-document.addEventListener("keyup", (event) => {
-    if (gameState === "Win" || gameState === "Lose"){
-        console.log("game over")
-        event.preventDefault()
-        return
+document.addEventListener("keydown", (event) => {
+    if (gameState === "Win" || gameState === "Lose" || isProcessingInput){
+        return;
     }
 
     if (isLetter(event.key)) {
-        inputs[currentIndex].value = event.key.toUpperCase();
-        if ((currentIndex + 1) % 5 !== 0 && currentIndex < 25){
-            currentIndex++;
-            inputs[currentIndex].focus(); // Move focus to the next input
-        }
-    }
-    
-    if (event.key === "Backspace" && currentIndex >= 0){
-        if (inputs[currentIndex].value !== "") {
-            inputs[currentIndex].value = "";
+        event.preventDefault();
+        handleInput(currentIndex, event.key);
+    } else if (event.key === "Backspace") {
+        event.preventDefault();
+        if (currentIndex >= minIndex) {
+            if (inputs[currentIndex].value !== "") {
+                inputs[currentIndex].value = "";
             } else if (currentIndex > minIndex) {
                 currentIndex--;
-                inputs[currentIndex].focus();
                 inputs[currentIndex].value = "";
-          }
-    }
-    
-    if (event.key === "Enter" && (currentIndex + 1) % 5 === 0 && inputs[currentIndex].value !== "" ){
-        processWord()
+                inputs[currentIndex].focus();
+            }
+        }
+    } else if (event.key === "Enter" && (currentIndex + 1) % 5 === 0 && inputs[currentIndex].value !== "") {
+        event.preventDefault();
+        processWord();
     }
 });
 
 window.addEventListener("load", () => {
     loadcomplete(false)
 });
-
-inputs.forEach(input => {
-    input.readOnly = true; // Keeps the input focusable but prevents editing
-});
-
