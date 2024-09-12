@@ -267,5 +267,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("load", () => {
+    inputs.forEach(input => {
+        input.value = "";
+    });
     loadcomplete(false)
 });
