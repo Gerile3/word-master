@@ -10,5 +10,5 @@ work in progress:
 - ~~implement daily word api~~
 - ~~add waiting animation~~
 - ~~implement random day function~~
-- add winning animation
+- ~~add winning animation~~
 - ~~add mobile support~~
