@@ -11,4 +11,4 @@ work in progress:
 - ~~add waiting animation~~
 - ~~implement random day function~~
 - add winning animation
-- add mobile support
+- ~~add mobile support~~
