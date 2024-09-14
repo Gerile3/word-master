@@ -194,38 +194,42 @@ const continueGame = (word) => {
     updateInputState();
 }
 
-async function processWord(){
-    if(gameState == "Normal"){
-        for (minIndex = currentIndex-4; minIndex < maxIndex; minIndex++) {
+async function processWord() {
+    if (gameState == "Normal") {
+        for (minIndex = currentIndex - 4; minIndex < maxIndex; minIndex++) {
             wordArray += inputs[minIndex].value
         }
         text.textContent = ""
         loadingIcon.classList.remove("hidden")
         const valid = await validateWord(wordArray);
 
-        if (valid){
-            for (minIndex = currentIndex-4; minIndex < maxIndex; minIndex++) {
-                word = inputs[minIndex].value
-
-                if (correctWord.includes(word)) {
-                    checkedChars += inputs[minIndex].value
-                    if (word === reversedCorrectWord[maxIndex - minIndex-1]){
-                        inputs[minIndex].style.backgroundColor = "green";
-                    } 
-                    else if(checkedChars.includes(word) && inputs[minIndex].style.backgroundColor !== "green") {
-                        inputs[minIndex].style.backgroundColor = "yellow";
-                    }
-                } else{
-                    inputs[minIndex].style.backgroundColor = "red";
+        if (valid) {
+            let remainingCorrectWord = correctWord;
+            for (let i = currentIndex - 4; i < maxIndex; i++) {
+                const word = inputs[i].value;
+                if (word === correctWord[i - (currentIndex - 4)]) {
+                    inputs[i].style.backgroundColor = "green";
+                    remainingCorrectWord = remainingCorrectWord.replace(word, '_');
                 }
             }
-            continueGame(checkedChars)
+            for (let i = currentIndex - 4; i < maxIndex; i++) {
+                const word = inputs[i].value;
+                if (inputs[i].style.backgroundColor !== "green") {
+                    if (remainingCorrectWord.includes(word)) {
+                        inputs[i].style.backgroundColor = "yellow";
+                        remainingCorrectWord = remainingCorrectWord.replace(word, '_');
+                    } else {
+                        inputs[i].style.backgroundColor = "red";
+                    }
+                }
+            }
+            continueGame(wordArray)
         } else {
             text.textContent = "You did not enter a valid word!"
-            for (let index = currentIndex-4; index < maxIndex; index++) {
+            for (let index = currentIndex - 4; index < maxIndex; index++) {
                 inputs[index].value = "";
             }
-            minIndex = currentIndex-4
+            minIndex = currentIndex - 4
             currentIndex -= 4
             wordArray = ""
         }
